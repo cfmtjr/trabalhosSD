@@ -19,8 +19,8 @@ extern "C" {
 
 #if defined(__STDC__) || defined(__cplusplus)
 #define HELLO 1
-extern  int * hello_1(char **, CLIENT *);
-extern  int * hello_1_svc(char **, struct svc_req *);
+extern  int * hello_1(void *, CLIENT *);
+extern  int * hello_1_svc(void *, struct svc_req *);
 extern int helloprog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */

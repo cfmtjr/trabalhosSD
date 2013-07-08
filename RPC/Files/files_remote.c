@@ -1,33 +1,36 @@
-#include "hello.h"
+#include "files.h"
+#include <stdio.h>
 
 int main(int argc, char* argv[])
 {
   CLIENT *clnt;
-  int *result;
-  char *server;
+  char *server, *message, **result;
   
-  if(argc < 2)
+  if(argc < 3)
   {
-    printf("Usage:\n %s host\n\n", argv[0]);
+    printf("Usage:\n %s host message\n\n", argv[0]);
     return 1;
   }
   
   server = argv[1];
+  message = argv[2];
   
-  //Conecta com o servidor RPC
-  clnt = clnt_create(server, HELLOPROG, HELLOVERS, "tcp");
+  clnt = clnt_create(server, FILEPROG, FILEVERS, "tcp");
   if(clnt == NULL)
   {
     clnt_pcreateerror(server);
     return 2;
   }
   
-  //Chama a função
-  result = hello_1(NULL, clnt);
+  result = showdir_1(message, clnt);
   if(result == NULL)
   {
     clnt_perror(clnt, server);
     return 3;
+  }
+  else
+  {
+    printf("Message received:\n%s\n", *result);
   }
   
   if(result == 0)
@@ -36,9 +39,7 @@ int main(int argc, char* argv[])
     return 4;
   }
   
-  printf("Message Delivered to %s\n", server);
-  
-  //Fecha a connecção com o servidor
+  printf("Message Delivered to %s .\n", server);
   clnt_destroy(clnt);
   
   return 0;

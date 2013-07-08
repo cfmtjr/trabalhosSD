@@ -3,7 +3,7 @@
  * It was generated using rpcgen.
  */
 
-#include "hello.h"
+#include "files.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <rpc/pmap_clnt.h>
@@ -16,11 +16,17 @@
 #define SIG_PF void(*)(int)
 #endif
 
+static char **
+_showdir_1 (char * *argp, struct svc_req *rqstp)
+{
+	return (showdir_1_svc(*argp, rqstp));
+}
+
 static void
-helloprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
+fileprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
-		int fill;
+		char *showdir_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -31,10 +37,10 @@ helloprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		(void) svc_sendreply (transp, (xdrproc_t) xdr_void, (char *)NULL);
 		return;
 
-	case HELLO:
-		_xdr_argument = (xdrproc_t) xdr_void;
-		_xdr_result = (xdrproc_t) xdr_int;
-		local = (char *(*)(char *, struct svc_req *)) hello_1_svc;
+	case SHOWDIR:
+		_xdr_argument = (xdrproc_t) xdr_wrapstring;
+		_xdr_result = (xdrproc_t) xdr_wrapstring;
+		local = (char *(*)(char *, struct svc_req *)) _showdir_1;
 		break;
 
 	default:
@@ -62,15 +68,15 @@ main (int argc, char **argv)
 {
 	register SVCXPRT *transp;
 
-	pmap_unset (HELLOPROG, HELLOVERS);
+	pmap_unset (FILEPROG, FILEVERS);
 
 	transp = svcudp_create(RPC_ANYSOCK);
 	if (transp == NULL) {
 		fprintf (stderr, "%s", "cannot create udp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, HELLOPROG, HELLOVERS, helloprog_1, IPPROTO_UDP)) {
-		fprintf (stderr, "%s", "unable to register (HELLOPROG, HELLOVERS, udp).");
+	if (!svc_register(transp, FILEPROG, FILEVERS, fileprog_1, IPPROTO_UDP)) {
+		fprintf (stderr, "%s", "unable to register (FILEPROG, FILEVERS, udp).");
 		exit(1);
 	}
 
@@ -79,8 +85,8 @@ main (int argc, char **argv)
 		fprintf (stderr, "%s", "cannot create tcp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, HELLOPROG, HELLOVERS, helloprog_1, IPPROTO_TCP)) {
-		fprintf (stderr, "%s", "unable to register (HELLOPROG, HELLOVERS, tcp).");
+	if (!svc_register(transp, FILEPROG, FILEVERS, fileprog_1, IPPROTO_TCP)) {
+		fprintf (stderr, "%s", "unable to register (FILEPROG, FILEVERS, tcp).");
 		exit(1);
 	}
 
