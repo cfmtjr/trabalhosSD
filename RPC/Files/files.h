@@ -21,12 +21,18 @@ extern "C" {
 #define SHOWDIR 1
 extern  char ** showdir_1(char *, CLIENT *);
 extern  char ** showdir_1_svc(char *, struct svc_req *);
+#define WRITEFILE 2
+extern  char ** writefile_1(char *, CLIENT *);
+extern  char ** writefile_1_svc(char *, struct svc_req *);
 extern int fileprog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
 #define SHOWDIR 1
 extern  char ** showdir_1();
 extern  char ** showdir_1_svc();
+#define WRITEFILE 2
+extern  char ** writefile_1();
+extern  char ** writefile_1_svc();
 extern int fileprog_1_freeresult ();
 #endif /* K&R C */
 

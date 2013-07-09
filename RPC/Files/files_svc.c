@@ -22,11 +22,18 @@ _showdir_1 (char * *argp, struct svc_req *rqstp)
 	return (showdir_1_svc(*argp, rqstp));
 }
 
+static char **
+_writefile_1 (char * *argp, struct svc_req *rqstp)
+{
+	return (writefile_1_svc(*argp, rqstp));
+}
+
 static void
 fileprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
 		char *showdir_1_arg;
+		char *writefile_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -41,6 +48,12 @@ fileprog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		_xdr_argument = (xdrproc_t) xdr_wrapstring;
 		_xdr_result = (xdrproc_t) xdr_wrapstring;
 		local = (char *(*)(char *, struct svc_req *)) _showdir_1;
+		break;
+
+	case WRITEFILE:
+		_xdr_argument = (xdrproc_t) xdr_wrapstring;
+		_xdr_result = (xdrproc_t) xdr_wrapstring;
+		local = (char *(*)(char *, struct svc_req *)) _writefile_1;
 		break;
 
 	default:

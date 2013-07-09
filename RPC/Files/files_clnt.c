@@ -23,3 +23,18 @@ showdir_1(char *arg1,  CLIENT *clnt)
 	}
 	return (&clnt_res);
 }
+
+char **
+writefile_1(char *arg1,  CLIENT *clnt)
+{
+	static char *clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, WRITEFILE,
+		(xdrproc_t) xdr_wrapstring, (caddr_t) &arg1,
+		(xdrproc_t) xdr_wrapstring, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
